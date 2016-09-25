@@ -11,7 +11,8 @@ def read_config(file):
 
 
 def retrieve_users():
-    resp, content = h.request(request_uri, "GET")
+    uri = '%s%susers?%s'%(_PROTOCOL, _API_URL, _ACCESS_TOKEN)
+    resp, content = h.request(uri, "GET")
 
     users_json = json.loads(content)
 
@@ -36,7 +37,7 @@ def create_bonus(winner):
 
 
 def post_bonus(bonus):
-    uri = 'https://bonus.ly/api/v1/bonuses?access_token=%s'%_API_TOKEN
+    uri = '%s%sbonuses?%s'%(_PROTOCOL, _API_URL, _ACCESS_TOKEN)
     data = dict(reason=bonus)
     return h.request(uri, "POST", urlencode(data))
 
@@ -45,10 +46,9 @@ h = Http()
 data = read_config('config/secrets.json')
 
 _API_TOKEN = data['token']
-
-api_url = 'bonus.ly/api/v1/'
-users_endpoint = 'users'
-request_uri = 'https://%s%s?access_token=%s'%(api_url,users_endpoint,_API_TOKEN)
+_PROTOCOL = 'https://'
+_API_URL = 'bonus.ly/api/v1/'
+_ACCESS_TOKEN = 'access_token=%s'%_API_TOKEN
 
 users = retrieve_users()
 
